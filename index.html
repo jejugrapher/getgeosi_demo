@@ -746,28 +746,26 @@ section { padding: 112px 32px; }
   color: var(--ink-soft);
 }
 
-/* 세로 스택 - 6개 영화가 아래로 쌓이는 구조 (지시 #27) */
-.film-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+/* 3×2 그리드 - 6개 영화 카드 (이전 버전 유지) */
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
 }
+@media (max-width: 900px) { .film-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .film-grid { grid-template-columns: 1fr; } }
 
 .film-card {
   background: var(--bg-card);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform 0.4s, box-shadow 0.4s;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  align-items: stretch;
-}
-@media (max-width: 720px) {
-  .film-card { grid-template-columns: 1fr; }
+  display: flex;
+  flex-direction: column;
 }
 .film-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
 }
 .film-poster {
@@ -778,9 +776,6 @@ section { padding: 112px 32px; }
   display: flex;
   align-items: center;
   justify-content: center;
-}
-@media (max-width: 720px) {
-  .film-poster { aspect-ratio: 3/2; }
 }
 .film-poster img {
   width: 100%; height: 100%;
@@ -802,12 +797,10 @@ section { padding: 112px 32px; }
   z-index: 2;
 }
 .film-body {
-  padding: 36px 40px 36px 36px;
+  padding: 22px 22px 26px;
+  flex: 1;
   display: flex;
   flex-direction: column;
-}
-@media (max-width: 720px) {
-  .film-body { padding: 28px 24px 28px; }
 }
 .film-meta {
   font-size: 12px;
@@ -818,7 +811,7 @@ section { padding: 112px 32px; }
   font-weight: 500;
 }
 .film-title {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.018em;
   margin-bottom: 6px;
@@ -828,33 +821,20 @@ section { padding: 112px 32px; }
 .film-title-en {
   font-size: 13px;
   color: var(--ink-faint);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   font-weight: 500;
   font-style: italic;
 }
 .film-director {
-  font-size: 14.5px;
+  font-size: 14px;
   color: var(--ink-soft);
-  margin-bottom: 18px;
-  line-height: 1.55;
+  margin-bottom: 16px;
+  line-height: 1.5;
 }
 .film-director strong { color: var(--ink); font-weight: 700; }
-
-/* 폐막작 시놉시스 (이상한 놈들의 세상 카드 통합) */
-.film-synopsis {
-  font-size: 14.5px;
-  line-height: 1.75;
-  color: var(--ink-soft);
-  margin-bottom: 20px;
-  padding: 18px 20px;
-  background: var(--bg);
-  border-left: 3px solid var(--sand-deep);
-  border-radius: 2px;
-}
-
 .film-screening {
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 16px;
   border-top: 1px dashed var(--line);
   font-size: 13px;
 }
@@ -872,32 +852,6 @@ section { padding: 112px 32px; }
   min-width: 48px;
 }
 .film-screening-place { font-size: 12px; color: var(--ink-faint); }
-
-/* 폐막작 크레딧 (Producer / Production / Support) */
-.film-credits {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--line);
-  font-size: 12.5px;
-  color: var(--ink);
-}
-.film-credits span em {
-  font-style: normal;
-  color: var(--ink-faint);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-right: 6px;
-  font-weight: 600;
-}
-
-/* 폐막작 카드 강조 */
-.film-card-closing {
-  border-top: 3px solid var(--sand-deep);
-}
 
 /* ============================================================
    SCHEDULE — 통합 일정표 (세로 카드 스택 · v4 리팩터)
@@ -2051,7 +2005,7 @@ section { padding: 112px 32px; }
       </div>
     </div>
 
-    <div class="film-stack">
+    <div class="film-grid">
 
       <!-- 1. 수라 (개막작) -->
       <article class="film-card reveal">
@@ -2159,8 +2113,8 @@ section { padding: 112px 32px; }
         </div>
       </article>
 
-      <!-- 6. 이상한 놈들의 세상 (폐막작 · 시놉시스 통합) -->
-      <article class="film-card film-card-closing reveal" style="transition-delay: 0.3s;">
+      <!-- 6. 이상한 놈들의 세상 (폐막작) -->
+      <article class="film-card reveal" style="transition-delay: 0.3s;">
         <div class="film-poster closing">
           <span class="film-badge">폐막작</span>
           <img src="./assets/poster_coral.jpg" alt="이상한 놈들의 세상 포스터" loading="lazy">
@@ -2168,22 +2122,14 @@ section { padding: 112px 32px; }
         <div class="film-body">
           <div class="film-meta">한국 · 47분 · 8K</div>
           <h3 class="film-title">이상한 놈들의 세상</h3>
-          <div class="film-title-en">THE CORAL TRIANGLE: A World of Oddities</div>
-          <div class="film-director">감독 <strong>임완호 · 육성우</strong> · 출연 김동식 수중촬영감독</div>
-          <p class="film-synopsis">
-            지구상에서 해양 생물 다양성이 가장 높은 '바다의 아마존' 코랄 트라이앵글. 30년 경력의 김동식 수중촬영감독이 20년 만에 8K 카메라를 들고 다시 이곳을 찾았다. 40가지 모습으로 변신하는 흉내문어, 낚싯대를 뻗는 씬벵이, 맹독을 품은 파란고리문어 등 기상천외한 위장술과 유혹의 기술로 살아남은 '이상한 놈들'의 세상을 담았다.
-          </p>
+          <div class="film-title-en">The Coral Triangle: A World of Oddities</div>
+          <div class="film-director">감독 <strong>임완호 · 육성우</strong> · 출연 김동식 수중촬영감독 · DMZWILD</div>
           <div class="film-screening">
             <div class="film-screening-line">
               <span class="film-screening-date">8/15 토</span>
-              <span>14:00 상영 · 14:50 GV · 15:30 폐막 인사</span>
+              <span>14:00 상영 · 14:50 GV</span>
             </div>
             <div class="film-screening-place">연동 롯데시네마 · 모더레이터 전성실</div>
-          </div>
-          <div class="film-credits">
-            <span><em>Producer</em> 이미진</span>
-            <span><em>Production</em> DMZWILD</span>
-            <span><em>Support</em> 문화체육관광부 · 한국콘텐츠진흥원</span>
           </div>
         </div>
       </article>
